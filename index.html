@@ -245,23 +245,31 @@
 
 <!-- ====================== CLAIM DIALOG ====================== -->
 <dialog class="claim" id="claimDialog">
-  <form method="dialog" id="claimForm">
-    <div class="claim__head">
-      <div>
-        <h3 id="claimTitle">Claim this deal</h3>
-        <p id="claimSub"></p>
-      </div>
-      <button class="claim__close" type="button" id="claimClose" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  <div class="claim__head">
+    <div>
+      <h3 id="claimTitle">Claim this deal</h3>
+      <p id="claimSub"></p>
     </div>
+    <button class="claim__close" type="button" id="claimClose" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  </div>
+
+  <form id="claimForm">
     <div class="claim__body">
       <div class="field">
         <label for="claimEmail">Your email</label>
         <input id="claimEmail" name="email" type="email" required placeholder="you@example.com" autocomplete="email">
-        <span class="hint">We send the code to your inbox and let you know when next month's deals go up. Unsubscribe any time.</span>
+        <span class="hint">We email you the code and let you know when next month's deals go up. Unsubscribe any time.</span>
       </div>
-      <button class="btn btn--primary btn--block" type="submit">Send me the code</button>
+      <button class="btn btn--primary btn--block" type="submit" id="claimSubmit">Get the code</button>
     </div>
   </form>
+
+  <div class="claim__body" id="claimDone" hidden>
+    <p class="eyebrow" style="margin:0">Show this at the counter</p>
+    <div class="claim__code" id="claimCode"></div>
+    <p id="claimDoneNote" style="margin:0;font-size:var(--size-body-s);color:var(--text-muted)"></p>
+    <button class="btn btn--dark btn--block" type="button" id="claimDoneClose">Done</button>
+  </div>
 </dialog>
 
 <div class="toast" id="toast" hidden role="status"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> <span id="toastText"></span></div>
@@ -272,6 +280,15 @@
      ========================================================================== -->
 <script>
 const KOOS = {
+
+  /* ---- SIGN-UP ---------------------------------------------------------
+     monthlyCode  the code staff accept at the counter this month.
+     listFormUrl  the MailerLite embedded-form action URL. Leave "" and the
+                  page still works: the code shows on screen, nothing is sent.
+  --------------------------------------------------------------------- */
+  monthlyCode: "KOOS-SEPT",
+  listFormUrl: "",
+
 
   /* ---- HOURS. Edit the times, keep the shape. ------------------------- */
   hours: [
@@ -545,27 +562,61 @@ const KOOS = {
 
   /* ---------- claim flow ---------- */
   const dlg = $("#claimDialog"), toast = $("#toast");
+  const claimForm = $("#claimForm"), claimDone = $("#claimDone");
   let current = null;
+
+  function openClaim(promo) {
+    current = promo;
+    $("#claimTitle").textContent = promo.title;
+    $("#claimSub").textContent =
+      `${promo.nowPrice} instead of ${promo.wasPrice}. Valid until ${fmtUntil(promo.until)}.`;
+    claimForm.hidden = false;
+    claimDone.hidden = true;
+    $("#claimEmail").value = "";
+    dlg.showModal();
+  }
 
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-claim]"); if (!btn) return;
-    current = live[+btn.dataset.claim];
-    $("#claimTitle").textContent = current.title;
-    $("#claimSub").textContent = `${current.nowPrice} instead of ${current.wasPrice}. Valid until ${fmtUntil(current.until)}.`;
-    dlg.showModal();
+    openClaim(live[+btn.dataset.claim]);
   });
 
   $("#claimClose").addEventListener("click", () => dlg.close());
+  $("#claimDoneClose").addEventListener("click", () => dlg.close());
 
-  $("#claimForm").addEventListener("submit", (e) => {
+  // Adds the address to the mailing list. Fire and forget: the customer gets
+  // their code either way, so a list outage never costs us the sale.
+  function joinList(email, dealTitle) {
+    if (!KOOS.listFormUrl) return Promise.resolve(false);
+    const body = new FormData();
+    body.append("fields[email]", email);
+    body.append("fields[deal]", dealTitle);
+    body.append("ml-submit", "1");
+    body.append("anticsrf", "true");
+    return fetch(KOOS.listFormUrl, { method: "POST", body, mode: "no-cors" })
+      .then(() => true).catch(() => false);
+  }
+
+  claimForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const email = $("#claimEmail").value.trim();
     if (!email) return;
-    // LAUNCH NOTE: this is where the address gets posted to the mailing list
-    // and the code is emailed out. Nothing is sent in this preview.
-    dlg.close();
-    $("#claimEmail").value = "";
-    showToast("Code sent. Check your inbox and show it at the counter.");
+
+    const code = current.code || KOOS.monthlyCode;
+    const submit = $("#claimSubmit");
+    submit.disabled = true;
+    submit.textContent = "One moment...";
+
+    joinList(email, current.title).then((sent) => {
+      $("#claimCode").textContent = code;
+      $("#claimDoneNote").textContent = sent
+        ? "We have emailed it to you as well. Valid until " + fmtUntil(current.until) + "."
+        : "Write it down or screenshot it. Valid until " + fmtUntil(current.until) + ".";
+      claimForm.hidden = true;
+      claimDone.hidden = false;
+      submit.disabled = false;
+      submit.textContent = "Get the code";
+    });
   });
 
   let toastTimer;
