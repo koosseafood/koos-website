@@ -287,7 +287,7 @@ const KOOS = {
                   page still works: the code shows on screen, nothing is sent.
   --------------------------------------------------------------------- */
   monthlyCode: "KOOS-SEPT",
-  listFormUrl: "",
+  listFormUrl: "https://assets.mailerlite.com/jsonp/2631789/forms/198432577554483123/subscribe",
 
 
   /* ---- HOURS. Edit the times, keep the shape. ------------------------- */
@@ -586,11 +586,13 @@ const KOOS = {
 
   // Adds the address to the mailing list. Fire and forget: the customer gets
   // their code either way, so a list outage never costs us the sale.
-  function joinList(email, dealTitle) {
+  // Only fields the MailerLite form itself declares are sent. Adding a field
+  // the form does not have makes the whole submission fail, so if you want to
+  // record which deal was claimed, add that field in MailerLite first.
+  function joinList(email) {
     if (!KOOS.listFormUrl) return Promise.resolve(false);
     const body = new FormData();
     body.append("fields[email]", email);
-    body.append("fields[deal]", dealTitle);
     body.append("ml-submit", "1");
     body.append("anticsrf", "true");
     return fetch(KOOS.listFormUrl, { method: "POST", body, mode: "no-cors" })
@@ -607,11 +609,13 @@ const KOOS = {
     submit.disabled = true;
     submit.textContent = "One moment...";
 
-    joinList(email, current.title).then((sent) => {
+    // The note deliberately does not promise an email. Change it to say the
+    // code was emailed only once the MailerLite welcome automation is live and
+    // actually contains the code.
+    joinList(email).then(() => {
       $("#claimCode").textContent = code;
-      $("#claimDoneNote").textContent = sent
-        ? "We have emailed it to you as well. Valid until " + fmtUntil(current.until) + "."
-        : "Write it down or screenshot it. Valid until " + fmtUntil(current.until) + ".";
+      $("#claimDoneNote").textContent =
+        "Screenshot this or write it down. Valid until " + fmtUntil(current.until) + ".";
       claimForm.hidden = true;
       claimDone.hidden = false;
       submit.disabled = false;
