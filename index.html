@@ -154,7 +154,7 @@
         <div class="card" style="background:var(--cream-50)">
           <div class="case-list" id="caseList"></div>
         </div>
-        <p style="color:var(--teal-300);font-size:var(--size-caption);margin-top:var(--space-4)">Case stock changes with the delivery. Call ahead for whole fish and large orders.</p>
+        <p style="color:var(--teal-300);font-size:var(--size-caption);margin-top:var(--space-4)">Prices as of September 2026. Case stock and market prices change with the delivery, so ask at the counter. Call ahead for whole fish and large orders.</p>
       </div>
     </div>
   </div>
@@ -289,6 +289,13 @@ const KOOS = {
   monthlyCode: "KOOS-SEPT",
   listFormUrl: "https://assets.mailerlite.com/jsonp/2631789/forms/198432577554483123/subscribe",
 
+  /* ---- TOP STRIP -------------------------------------------------------
+     Shown across the top of the page when there are no live deals.
+     Set to "" to show nothing. When deals ARE running, the first deal
+     takes this space over automatically and this line is ignored.
+  --------------------------------------------------------------------- */
+  notice: "New site, still filling it in. Order on DoorDash or call us on 205-783-5551.",
+
 
   /* ---- HOURS. Edit the times, keep the shape. ------------------------- */
   hours: [
@@ -296,8 +303,8 @@ const KOOS = {
     ["Tuesday",   "11:00 AM – 9:00 PM"],
     ["Wednesday", "11:00 AM – 9:00 PM"],
     ["Thursday",  "11:00 AM – 9:00 PM"],
-    ["Friday",    "11:00 AM – 9:30 PM"],
-    ["Saturday",  "11:00 AM – 9:30 PM"],
+    ["Friday",    "11:00 AM – 10:00 PM"],
+    ["Saturday",  "11:00 AM – 10:00 PM"],
     ["Sunday",    "Closed"]
   ],
 
@@ -305,49 +312,47 @@ const KOOS = {
      This is the monthly job. Each deal has: photo, title, blurb,
      was-price, now-price, an end date, and whether claiming is on.
      Delete a deal or set `until` to a past date and it drops off the site.
-     SAMPLE DATA - replace with your real offers.
+
+     EMPTY ON PURPOSE. The sample deals were removed on 2026-09-12 before the
+     site was linked from Google Business Profile, so nobody arrives at the
+     counter asking for a price that was never real.
+
+     With this list empty the whole Deals section disappears, the nav and
+     footer links to it disappear, and the top strip shows `notice` instead.
+     Paste a real deal in using the shape below and everything comes back.
+
+       {
+         title:     "20-wing party tray",
+         blurb:     "Four flavors, big fries, ranch and celery.",
+         image:     "img/tray.webp",      // see the image list in build_dist.py
+         wasPrice:  "$32.99",
+         nowPrice:  "$26.99",
+         until:     "2026-09-30",        // YYYY-MM-DD, drops off after this
+         flag:      "Save $6",
+         claimable: true                 // false = no email capture, just shown
+       }
   --------------------------------------------------------------------- */
-  promos: [
-    {
-      title: "20-wing party tray",
-      blurb: "Four flavours, big fries, ranch and celery. Made to order for pickup.",
-      image: "img/tray.webp",
-      wasPrice: "$32.99",
-      nowPrice: "$26.99",
-      until: "2026-09-30",
-      flag: "Save $6",
-      claimable: true
-    },
-    {
-      title: "Grilled tilapia & shrimp plate",
-      blurb: "Grilled fillet over rice with peppered shrimp and a green side. Off the flat top, not the fryer.",
-      image: "img/plate_grilled.webp",
-      wasPrice: "$16.99",
-      nowPrice: "$13.99",
-      until: "2026-09-30",
-      flag: "Save $3",
-      claimable: true
-    },
-    {
-      title: "Friday boil, 1 lb snow crab",
-      blurb: "Snow crab and twelve medium shrimp with two sides and a drink. Fridays only, until we run out.",
-      image: "img/case.webp",
-      wasPrice: "$24.99",
-      nowPrice: "$21.99",
-      until: "2026-09-30",
-      flag: "Fridays only",
-      claimable: true
-    }
-  ],
+  promos: [],
 
   /* ---- THE MARKET CASE ------------------------------------------------ */
+  /* In-store prices, September 2026. Highest first, same order as the board.
+     Optional `note` prints in small type under the name, for anything not
+     always in the case. */
   caseItems: [
-    { name: "Crawfish",       price: "$9.99 / lb" },
-    { name: "Catfish fillet", price: "$12.99 / lb" },
-    { name: "Jumbo shrimp",   price: "$15.99 / lb" },
-    { name: "Red snapper",    price: "$17.99 / lb" },
-    { name: "Salmon fillet",  price: "$17.99 / lb" },
-    { name: "Snow crab legs", price: "$28.99 / lb" }
+    { name: "Snow crab legs",  price: "$28.99 / lb" },
+    { name: "Red snapper",     price: "$17.99 / lb" },
+    { name: "Salmon fillet",   price: "$17.99 / lb" },
+    { name: "Jumbo shrimp",    price: "$15.99 / lb" },
+    { name: "Medium shrimp",   price: "$13.99 / lb", note: "Peeled or head-on" },
+    { name: "Calamari",        price: "$13.99 / lb", note: "Squid rings" },
+    { name: "Frog legs",       price: "$13.99 / lb" },
+    { name: "Catfish fillet",  price: "$12.99 / lb" },
+    { name: "Basa fillet",     price: "$11.99 / lb", note: "Swai" },
+    { name: "Ocean perch fillet", price: "$11.99 / lb" },
+    { name: "Flounder fillet", price: "$11.99 / lb" },
+    { name: "Whiting fillet",  price: "$9.99 / lb" },
+    { name: "Tilapia fillet",  price: "$9.99 / lb" },
+    { name: "Crawfish",        price: "$9.99 / lb", note: "Seasonal, call ahead" }
   ],
 
   /* ---- MENU -----------------------------------------------------------
@@ -506,19 +511,33 @@ const KOOS = {
         ${p.until ? `<p class="promo__until">${ICON_CLOCK} Valid until ${esc(fmtUntil(p.until))}</p>` : ""}
       </div>
     </article>`).join("")
-    : `<div class="card" style="grid-column:1/-1;text-align:center;color:var(--text-muted)">
-         No deals running this minute. Check back at the start of the month.
-       </div>`;
+    : "";
 
+  // With no live deals the section is removed outright rather than left
+  // showing an empty shell, and every link pointing at it goes too. An
+  // advertised Deals section with nothing in it reads worse than no section.
   if (live.length) {
     $("#promoStripText").innerHTML =
-      `<strong>${esc(live[0].title)}</strong> &mdash; ${esc(live[0].nowPrice)} until ${esc(fmtUntil(live[0].until))}`;
+      `<strong>${esc(live[0].title)}</strong>, ${esc(live[0].nowPrice)} until ${esc(fmtUntil(live[0].until))}`;
     $("#promoStrip").hidden = false;
+  } else {
+    $("#deals").hidden = true;
+    document.querySelectorAll('a[href="#deals"]').forEach(a => {
+      const li = a.closest("li");
+      (li || a).hidden = true;
+    });
+    if (KOOS.notice) {
+      $("#promoStripText").textContent = KOOS.notice;
+      $("#promoStrip").hidden = false;
+    }
   }
 
   /* ---------- case ---------- */
   $("#caseList").innerHTML = KOOS.caseItems.map(it =>
-    `<div class="case-row"><span class="case-row__name">${esc(it.name)}</span><span class="case-row__price">${esc(it.price)}</span></div>`
+    `<div class="case-row">
+       <span class="case-row__name">${esc(it.name)}${it.note ? `<span class="case-row__note">${esc(it.note)}</span>` : ""}</span>
+       <span class="case-row__price">${esc(it.price)}</span>
+     </div>`
   ).join("");
 
   /* ---------- menu ---------- */
@@ -589,9 +608,13 @@ const KOOS = {
   // Only fields the MailerLite form itself declares are sent. Adding a field
   // the form does not have makes the whole submission fail, so if you want to
   // record which deal was claimed, add that field in MailerLite first.
+  // URLSearchParams, not FormData. FormData sends multipart/form-data;
+  // MailerLite's own script sends application/x-www-form-urlencoded and their
+  // endpoint appears to want that. mode:"no-cors" means the response is opaque,
+  // so this can never report whether the address actually landed.
   function joinList(email) {
     if (!KOOS.listFormUrl) return Promise.resolve(false);
-    const body = new FormData();
+    const body = new URLSearchParams();
     body.append("fields[email]", email);
     body.append("ml-submit", "1");
     body.append("anticsrf", "true");
@@ -650,7 +673,7 @@ const KOOS = {
   },
   "openingHoursSpecification": [
     { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday"], "opens": "11:00", "closes": "21:00" },
-    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Friday","Saturday"], "opens": "11:00", "closes": "21:30" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Friday","Saturday"], "opens": "11:00", "closes": "22:00" },
     { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "00:00", "closes": "00:00" }
   ],
   "url": "https://koosseafood.com/"
