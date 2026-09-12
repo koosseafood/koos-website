@@ -88,6 +88,37 @@
   </div>
 </section>
 
+<!-- ====================== SIGN-UP ======================
+     Standalone email capture. Independent of whether any deal is running,
+     so the list keeps growing in months with nothing on offer. Posts to the
+     same MailerLite form as the claim dialog.
+-->
+<section class="section section--shell" id="signup">
+  <div class="wrap">
+    <div class="card card--decal signup">
+      <div>
+        <p class="eyebrow">Deals by email</p>
+        <h2 class="signup__title">Be first to know</h2>
+        <p class="signup__lede">New deals go up at the start of every month. Leave your email and we will send them to you with the code to show at the counter.</p>
+      </div>
+      <div class="signup__side">
+        <form id="signupForm">
+          <div class="field">
+            <label for="signupEmail">Your email</label>
+            <input id="signupEmail" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+            <span class="hint">One email a month. Unsubscribe any time.</span>
+          </div>
+          <button class="btn btn--primary btn--block" type="submit" id="signupSubmit" style="margin-top:var(--space-4)">Keep me posted</button>
+        </form>
+        <div id="signupDone" hidden>
+          <p class="eyebrow" style="margin:0 0 var(--space-2)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> You are on the list</p>
+          <p class="signup__lede" style="margin:0">We will email you when next month's deals go up.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ====================== HOW IT WORKS ====================== -->
 <section class="section section--shell">
   <div class="wrap">
@@ -643,6 +674,20 @@ const KOOS = {
       claimDone.hidden = false;
       submit.disabled = false;
       submit.textContent = "Get the code";
+    });
+  });
+
+  /* ---------- standalone sign-up ---------- */
+  $("#signupForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = $("#signupEmail").value.trim();
+    if (!email) return;
+    const submit = $("#signupSubmit");
+    submit.disabled = true;
+    submit.textContent = "One moment...";
+    joinList(email).then(() => {
+      $("#signupForm").hidden = true;
+      $("#signupDone").hidden = false;
     });
   });
 

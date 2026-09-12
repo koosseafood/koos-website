@@ -727,6 +727,18 @@ dialog.claim::backdrop { background: rgba(8, 34, 43, .6); }
 }
 .field .hint { font-size: var(--size-caption); color: var(--text-muted); }
 
+/* ---- sign-up band ---- */
+.signup {
+  display: grid; grid-template-columns: 1.15fr .85fr;
+  gap: var(--space-7); align-items: center;
+}
+.signup__title { font-size: var(--size-display-m); line-height: var(--lh-display-m); margin-bottom: var(--space-3); }
+.signup__lede { color: var(--text-muted); max-width: var(--measure); margin: 0; }
+.signup__side { min-width: 0; }
+@media (max-width: 860px) {
+  .signup { grid-template-columns: 1fr; gap: var(--space-5); }
+}
+
 .toast {
   position: fixed; left: 50%; bottom: var(--space-6); transform: translateX(-50%);
   background: var(--kelp-600); color: var(--cream-50);
