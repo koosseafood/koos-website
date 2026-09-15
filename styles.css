@@ -598,6 +598,33 @@ a:hover { color: var(--text-link-hover); }
   padding: var(--card-pad-tight) var(--space-5);
 }
 .menu-item__top { display: flex; align-items: baseline; gap: var(--space-4); }
+
+/* An expandable row. The button is stripped back to look exactly like the
+   static rows, so the only visible difference is the chevron. */
+button.menu-item__top {
+  background: none; border: 0; font: inherit; color: inherit;
+  text-align: left; cursor: pointer;
+  /* Bleed out over the card's padding so the whole card is the tap target,
+     not just the line of text. Keeps the row looking identical. */
+  margin: calc(var(--card-pad-tight) * -1) calc(var(--space-5) * -1);
+  padding: var(--card-pad-tight) var(--space-5);
+  /* A button shrinks to fit by default, which collapses the dotted leader.
+     Full card width, padding included. */
+  width: calc(100% + (var(--space-5) * 2));
+  box-sizing: border-box;
+}
+.menu-item--open > .menu-item__desc { margin-top: var(--space-3); }
+button.menu-item__top:focus-visible { outline: 3px solid var(--teal-500); outline-offset: 4px; }
+.menu-item__chev {
+  align-self: center; flex: none; display: flex;
+  color: var(--text-muted); transition: transform .15s ease;
+}
+.menu-item__chev svg { width: 16px; height: 16px; }
+button.menu-item__top[aria-expanded="true"] .menu-item__chev { transform: rotate(180deg); }
+@media (hover: hover) {
+  button.menu-item__top:hover .menu-item__name { color: var(--rust-600); }
+  button.menu-item__top:hover .menu-item__chev { color: var(--rust-600); }
+}
 .menu-item__name {
   font-family: var(--font-display); font-weight: var(--weight-bold);
   font-size: var(--size-body-l); line-height: 1.2; color: var(--navy-800);
