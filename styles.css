@@ -502,6 +502,22 @@ a:hover { color: var(--text-link-hover); }
 }
 .tag--soldout { background: var(--rust-600); color: var(--cream-50); }
 
+/* Wing flavor row. Amber rather than orange so twelve of them in a block do
+   not shout louder than the prices below. */
+.flavors {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2);
+  margin: 0 0 var(--space-5);
+}
+.flavors__label {
+  font-family: var(--font-display); font-weight: var(--weight-bold);
+  font-size: var(--size-caption); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--text-muted); margin-right: var(--space-2);
+}
+.tag--flavor {
+  background: var(--amber-400); color: var(--navy-800);
+  letter-spacing: .04em; text-transform: none; font-size: 12px;
+}
+
 /* --- Promotions ---------------------------------------------------------- */
 
 .promo-strip {
@@ -753,6 +769,40 @@ dialog.claim::backdrop { background: rgba(8, 34, 43, .6); }
   border: var(--stroke-keyline); border-radius: var(--radius-2);
 }
 .field .hint { font-size: var(--size-caption); color: var(--text-muted); }
+
+/* Any element given display: here would otherwise outrank the browser's own
+   [hidden] rule and stay visible. This makes hidden mean hidden, everywhere. */
+[hidden] { display: none !important; }
+
+/* ---- contact form ---- */
+.contact__grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4) var(--space-5);
+}
+.field--full { grid-column: 1 / -1; }
+.field__opt {
+  font-family: var(--font-text); font-weight: var(--weight-regular);
+  font-size: var(--size-caption); color: var(--text-muted); text-transform: none;
+}
+.field select, .field textarea {
+  font-family: var(--font-text); font-size: var(--size-body-m);
+  color: var(--text-body); background: var(--white);
+  border: var(--stroke-keyline); border-radius: var(--radius-2);
+  padding: 0 var(--space-4);
+}
+.field select { height: var(--control-h-m); }
+.field textarea { padding: var(--space-3) var(--space-4); line-height: 1.5; resize: vertical; }
+.contact__actions {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+.contact__err {
+  margin: 0; color: var(--rust-600); font-weight: var(--weight-bold);
+  font-size: var(--size-body-s);
+}
+@media (max-width: 720px) {
+  .contact__grid { grid-template-columns: 1fr; }
+}
 
 /* ---- sign-up band ---- */
 .signup {

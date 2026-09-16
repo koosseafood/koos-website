@@ -3,14 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PX8HQTY0FQ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-PX8HQTY0FQ');
-</script>
 <title>Koo's Seafood &amp; Fish Market | Birmingham, AL</title>
 <meta name="description" content="A fish market with a kitchen in it. Fresh fish, shrimp, crab and wings at 1840 Center Point Pkwy, Birmingham. Buy it raw from the case or have us cook it.">
 <link rel="icon" href="img/logo_64.webp">
@@ -20,8 +12,16 @@
 <meta property="og:url" content="https://koosseafood.com/">
 <link rel="canonical" href="https://koosseafood.com/">
 
-<link rel="stylesheet" href="styles.css?v=307fb8e5">
+<link rel="stylesheet" href="styles.css?v=d30bcaa1">
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PX8HQTY0FQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-PX8HQTY0FQ');
+</script>
 </head>
 <body>
 
@@ -38,6 +38,7 @@
     <nav class="nav__links" aria-label="Main">
       <a href="#deals">Deals</a>
       <a href="#menu">Menu</a>
+      <a href="#contact">Catering</a>
       <a href="#case">The Case</a>
       <a href="#visit">Visit</a>
     </nav>
@@ -249,6 +250,84 @@
   </div>
 </section>
 
+<!-- ====================== CONTACT ======================
+     Posts to Web3Forms, which emails the submission to the address tied to
+     the access key. The address itself never appears in this page, so it is
+     not harvestable. Catering fields only appear when Catering is picked.
+-->
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Get in touch</p>
+        <h2>Catering, events and everything else</h2>
+        <p>Planning a party, a work lunch or a family gathering? Tell us the date and how many people and we will come back with a quote. Everything else lands here too.</p>
+      </div>
+      <a class="btn btn--ghost btn--sm" href="tel:+12057835551"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></svg> Or just call us</a>
+    </div>
+
+    <div class="card card--decal contact">
+      <form id="contactForm" novalidate>
+        <div class="contact__grid">
+          <div class="field field--full">
+            <label for="cTopic">What's this about?</label>
+            <select id="cTopic" name="topic" required>
+              <option value="Catering">Catering or a large order</option>
+              <option value="Sponsorship or partnership">Sponsorship or partnership</option>
+              <option value="Something else">Something else</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="cName">Your name</label>
+            <input id="cName" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="cEmail">Email</label>
+            <input id="cEmail" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="cPhone">Phone <span class="field__opt">optional</span></label>
+            <input id="cPhone" name="phone" type="tel" autocomplete="tel">
+          </div>
+
+          <!-- catering only -->
+          <div class="field" data-catering hidden>
+            <label for="cDate">Date of the event</label>
+            <input id="cDate" name="event_date" type="date">
+          </div>
+          <div class="field" data-catering hidden>
+            <label for="cPeople">How many people</label>
+            <input id="cPeople" name="headcount" type="number" min="1" inputmode="numeric">
+          </div>
+
+          <div class="field field--full">
+            <label for="cMessage">Message</label>
+            <textarea id="cMessage" name="message" rows="4" required></textarea>
+            <span class="hint" id="cHint">Tell us what you need and we will get back to you.</span>
+          </div>
+        </div>
+
+        <!-- honeypot: hidden from people, filled in by bots -->
+        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+        <div class="contact__actions">
+          <button class="btn btn--primary" type="submit" id="cSubmit">Send it</button>
+          <p class="contact__err" id="cErr" hidden></p>
+        </div>
+      </form>
+
+      <div id="contactDone" hidden>
+        <p class="eyebrow" style="margin:0 0 var(--space-2)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Message sent</p>
+        <p style="margin:0;color:var(--text-muted);max-width:var(--measure)">
+          We have it. Expect a reply within a day. If it is urgent, call
+          <a href="tel:+12057835551" style="color:var(--rust-600);font-weight:700">(205) 783-5551</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ====================== FOOTER ====================== -->
 <footer class="footer">
   <div class="footer__inner">
@@ -270,6 +349,7 @@
       <ul>
         <li><a href="#case">The market case</a></li>
         <li><a href="#deals">This month's deals</a></li>
+        <li><a href="#contact">Catering &amp; large orders</a></li>
         <li><a href="#visit">Hours &amp; directions</a></li>
         <li><a href="tel:+12057835551">(205) 783-5551</a></li>
       </ul>
@@ -335,6 +415,15 @@ const KOOS = {
   --------------------------------------------------------------------- */
   notice: "New site, still filling it in. Order on DoorDash or call us on 205-783-5551.",
 
+  /* ---- CONTACT FORM ----------------------------------------------------
+     Web3Forms access key. Get it at web3forms.com by entering the inbox you
+     want submissions to land in (info@koosseafood.com). The key is safe to
+     publish: it only says where to deliver, it grants nothing.
+     Leave "" and the form shows a "call us instead" message rather than
+     silently failing.
+  --------------------------------------------------------------------- */
+  contactKey: "091b93a5-311e-4f8c-b377-08d8ee8b2f6a",
+
 
   /* ---- HOURS. Edit the times, keep the shape. ------------------------- */
   hours: [
@@ -372,6 +461,17 @@ const KOOS = {
        }
   --------------------------------------------------------------------- */
   promos: [],
+
+  /* ---- WING FLAVORS ---------------------------------------------------
+     One list, shown under both Chicken Wings and Fish & Wings. Add or remove
+     a name here and it updates in both places. Keep the count honest: the
+     category notes say "twelve".
+  --------------------------------------------------------------------- */
+  wingFlavors: [
+    "Mild", "Hot", "Lemon Pepper", "Lemon Pepper (Wet)", "Hot BBQ", "Teriyaki",
+    "Honey Mustard", "Mango Habanero", "Cajun", "Garlic Parmesan",
+    "Sweet Chili", "Plain"
+  ],
 
   /* ---- THE MARKET CASE ------------------------------------------------ */
   /* In-store prices, September 2026. Highest first, same order as the board.
@@ -423,7 +523,7 @@ const KOOS = {
         { name: "Jumbo Shrimp (20 Pc) + Free Side", price: "$16.99", desc: "Twenty jumbo shrimp, fried or grilled, with a free side and a drink." },
         { name: "Chicken Tenders", price: "$10.99", desc: "Breaded chicken tenders, fried to order. Served with a side and a drink." },
       ] },
-    { id: "fishwings", label: "Fish & Wings",
+    { id: "fishwings", label: "Fish & Wings", flavors: true,
       note: "Southern fried fish and chicken wings on the same plate. Pick your fish, pick your wing flavor from twelve.",
       items: [
         { name: "Whiting Fish (1 Pc) + Wings (5 Pc)", price: "$11.99", desc: "One whiting fillet and five wings in your choice of flavor. Served with a drink." },
@@ -452,7 +552,7 @@ const KOOS = {
         { name: "Louisiana's Snack Platter", price: "$39.99", desc: "Ten crawfish, one snow crab leg, ten mussels, ten medium shrimp and sausage, with two corn and two potatoes.", fresh: true },
         { name: "Louisiana Snack Platter (Jumbo)", price: "$52.99", desc: "Fifteen crawfish, two snow crab legs, ten mussels, ten jumbo shrimp and sausage, with three corn and three potatoes.", badge: "Feeds a table", fresh: true },
       ] },
-    { id: "wings", label: "Chicken Wings",
+    { id: "wings", label: "Chicken Wings", flavors: true,
       note: "Six pieces to fifty. Twelve flavors from mild to mango habanero. All drums +$1.00, all flats +$1.60.",
       items: [
         { name: "Chicken Wings (6 Pc) Combo", price: "$8.99", desc: "Six wings tossed in your flavor, with a drink." },
@@ -592,6 +692,11 @@ const KOOS = {
       line-height:var(--lh-display-s);margin-bottom:var(--space-3)">${esc(s.label)}</h3>`;
     const note = s.note
       ? `<div class="menu-note"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>${esc(s.note)}</span></div>` : "";
+    const flavors = s.flavors
+      ? `<div class="flavors">
+           <span class="flavors__label">Flavors</span>
+           ${KOOS.wingFlavors.map(f => `<span class="tag tag--flavor">${esc(f)}</span>`).join("")}
+         </div>` : "";
     const body = s.items.length
       // An item with a description becomes a button that opens it. Click, not
       // hover: phones have no hover, and a hover-open would shove the grid
@@ -624,7 +729,7 @@ const KOOS = {
            <p style="margin:0"><strong style="font-family:var(--font-display);font-size:var(--size-body-l);color:var(--navy-800)">Waiting on your item list.</strong><br>
            Send the dishes and prices for <strong>${esc(s.label)}</strong> and they appear here.</p>
          </div>`;
-    panel.innerHTML = `<div role="tabpanel" id="panel-${s.id}" aria-labelledby="tab-${s.id}">${head}${note}${body}</div>`;
+    panel.innerHTML = `<div role="tabpanel" id="panel-${s.id}" aria-labelledby="tab-${s.id}">${head}${note}${flavors}${body}</div>`;
   }
 
   tabs.addEventListener("click", (e) => {
@@ -722,6 +827,71 @@ const KOOS = {
       $("#signupDone").hidden = false;
     });
   });
+
+  /* ---------- contact form ---------- */
+  (function () {
+    const form = $("#contactForm"), done = $("#contactDone");
+    const topic = $("#cTopic"), err = $("#cErr"), submit = $("#cSubmit");
+    if (!form) return;
+
+    const cateringFields = [...document.querySelectorAll("[data-catering]")];
+    function syncTopic() {
+      const isCatering = topic.value === "Catering";
+      cateringFields.forEach(f => { f.hidden = !isCatering; });
+      $("#cHint").textContent = isCatering
+        ? "Which pack, any allergies, pickup or delivery. The more you tell us the tighter the quote."
+        : "Tell us what you need and we will get back to you.";
+    }
+    topic.addEventListener("change", syncTopic);
+    syncTopic();
+
+    function fail(msg) {
+      err.textContent = msg;
+      err.hidden = false;
+      submit.disabled = false;
+      submit.textContent = "Send it";
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      err.hidden = true;
+
+      if (!form.reportValidity()) return;
+      if (!KOOS.contactKey) {
+        fail("The form is not connected yet. Please call us on (205) 783-5551.");
+        return;
+      }
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      // Hidden catering fields must not travel, or a sponsorship pitch arrives
+      // carrying a blank event date.
+      if (topic.value !== "Catering") { delete data.event_date; delete data.headcount; }
+
+      const payload = Object.assign({}, data, {
+        access_key: KOOS.contactKey,
+        from_name: "Koo's website",
+        subject: topic.value + " enquiry from " + (data.name || "the website"),
+        replyto: data.email || ""
+      });
+
+      submit.disabled = true;
+      submit.textContent = "Sending...";
+
+      // Unlike the mailing list, this response is readable, so a real failure
+      // is reported instead of pretending it worked.
+      fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(r => r.json())
+        .then(res => {
+          if (res && res.success) { form.hidden = true; done.hidden = false; }
+          else { fail("That did not go through. Please call us on (205) 783-5551."); }
+        })
+        .catch(() => fail("That did not go through. Please call us on (205) 783-5551."));
+    });
+  })();
 
   let toastTimer;
   function showToast(msg) {
