@@ -853,3 +853,7 @@ dialog.claim::backdrop { background: rgba(8, 34, 43, .6); }
   font-size: var(--size-caption); color: var(--teal-300); opacity: .8;
   display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: space-between;
 }
+
+/* ---- Koo's Specials cards (menu tab, reuses .promo) ---- */
+.specials { margin-top: var(--space-5); }
+.promo__body p.special__sub { flex: none; color: var(--navy-800); font-weight: 600; font-size: var(--size-body-s); }
