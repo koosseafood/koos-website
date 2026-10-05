@@ -75,6 +75,7 @@ src="https://www.facebook.com/tr?id=2359438597892481&ev=PageView&noscript=1"
   <div class="promo-strip__inner">
     <span id="promoStripText"></span>
     <a href="#deals">See all deals &rarr;</a>
+    <a href="#menu" id="promoStripLink" hidden></a>
   </div>
 </div>
 
@@ -433,7 +434,8 @@ const KOOS = {
      Set to "" to show nothing. When deals ARE running, the first deal
      takes this space over automatically and this line is ignored.
   --------------------------------------------------------------------- */
-  notice: "New site, still filling it in. Order online or call us on 205-783-5551.",
+  notice: "New: Koombos. Six combos, $19.95 each, drink included.",
+  noticeLink: { text: "See the Koombos", tab: "specials" },   // null = no link
 
   /* ---- CONTACT FORM ----------------------------------------------------
      Web3Forms access key. Get it at web3forms.com by entering the inbox you
@@ -718,6 +720,12 @@ const KOOS = {
     });
     if (KOOS.notice) {
       $("#promoStripText").textContent = KOOS.notice;
+      if (KOOS.noticeLink) {
+        const a = $("#promoStripLink");
+        a.textContent = KOOS.noticeLink.text + " \u2192";
+        a.dataset.tab = KOOS.noticeLink.tab;
+        a.hidden = false;
+      }
       $("#promoStrip").hidden = false;
     }
   }
